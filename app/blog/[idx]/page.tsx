@@ -48,8 +48,11 @@ const Blog = ({ params: { idx } }: { params: { idx: string } }) => {
           dangerouslySetInnerHTML={{ __html: blog ? blog.blog : "loading..." }}
         />
 
-        <div className="py-2">
-          <p className="text-center font-bold text-2xl">...</p>
+        <div className="py-1">
+          <p className="text-center text-2xl">
+            <span className="font-bold">...</span> Subscribe to our newsletter
+            to continue reading
+          </p>
         </div>
 
         {/* // newsletter form */}
@@ -60,7 +63,7 @@ const Blog = ({ params: { idx } }: { params: { idx: string } }) => {
                 <div className="flex w-full">
                   <div className="w-3/5 m-auto py-1">
                     <h3 className="text-center text-lg font-bold">
-                      Subscribe to our newsletter to read the rest
+                      Subscribe to our newsletter
                     </h3>
                   </div>
                 </div>
