@@ -1,12 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 "use client";
-
-import { ROUTES } from "@lib/atoms/routes";
-import Service from "@lib/atoms/service";
-import { IBlog } from "@lib/interfaces";
 import React, { useEffect, useState } from "react";
-import { FaUserEdit } from "react-icons/fa";
+import { FaLinkedin, FaTwitter, FaUserEdit } from "react-icons/fa";
+
+import Service from "@lib/atoms/service";
+import { ROUTES } from "@lib/atoms/routes";
+import { IBlog } from "@lib/interfaces";
+
+import Subscribe from "@components/Subscribe";
+import Button from "@components/widgets/Button";
+import { MdFacebook, MdOutlineContentCopy } from "react-icons/md";
 
 const Blog = ({ params: { idx } }: { params: { idx: string } }) => {
   const [blog, setBlog] = useState<IBlog | null>(null);
@@ -22,7 +26,7 @@ const Blog = ({ params: { idx } }: { params: { idx: string } }) => {
 
   return (
     <div className="w-full bg-white py-10 text-black">
-      <div className="w-full px-5 lg:px-0 lg:w-6/12 space-y-10 mx-auto">
+      <div className="w-full px-5 relative lg:px-0 lg:w-6/12 space-y-10 mx-auto">
         <p className="flex items-center gap-2">
           <FaUserEdit className="text-xl" />
           <span>by {blog ? blog.author : "YooKatale"}</span>
@@ -43,10 +47,20 @@ const Blog = ({ params: { idx } }: { params: { idx: string } }) => {
 
         <p>{blog ? new Date(blog.createdAt).toDateString() : "loading..."}</p>
 
-        <div
-          className="lg:text-lg"
-          dangerouslySetInnerHTML={{ __html: blog ? blog.blog : "loading..." }}
-        />
+        <div className="w-full relative">
+          <div
+            className="lg:text-lg"
+            dangerouslySetInnerHTML={{
+              __html: blog ? blog.blog : "loading...",
+            }}
+          />
+          <div className="border-t border-gray-400 py-2"></div>
+          <div
+            className={`bg-yellow-700 rounded-md w-full absolute bottom-0 h-5/6 backdrop-filter backdrop-blur-lg shadow-gray-50 shadow-inner bg-opacity-5 `}
+          ></div>
+        </div>
+
+        <Subscribe />
       </div>
     </div>
   );
