@@ -119,7 +119,7 @@ const Careers = () => {
   return (
     <div>
       <div className={"flex py-4"}>
-        <div className="m-auto w-4/5">
+        <div className="m-auto w-4/5 sm:w-full">
           <div className="py-4">
             <h3 className="text-3xl">Join our team</h3>
             <p className="text-lg my-1">Available positions</p>
