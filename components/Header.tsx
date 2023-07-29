@@ -44,8 +44,8 @@ const Header = () => {
             border-gray-600
             lg:py-10
             py-8
-            xl:text-9xl
-            lg:text-7xl
+            xl:text-4xl
+            lg:text-2xl
             font-extrabold
             text-4xl
             uppercase
