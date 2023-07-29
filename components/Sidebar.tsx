@@ -19,7 +19,7 @@ const Sidebar = () => {
   if (!sideMenuState) return null;
 
   return (
-    <div className="fixed transition-all ease-in-out duration-700 bg-gray-900 w-full h-screen px-9 py-9">
+    <div className="fixed z-[999999] transition-all ease-in-out duration-700 bg-gray-900 w-full h-screen px-9 py-9">
       <div className="flex justify-end">
         <Button
           className="p-2 rounded border-0 bg-gray-700"
