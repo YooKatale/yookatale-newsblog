@@ -62,38 +62,6 @@ const Blog = ({ params: { idx } }: { params: { idx: string } }) => {
             </p>
           </div>
 
-          {/* // newsletter form */}
-          <div className="flex px-6">
-            <div className="m-auto w-4/5">
-              <div className="border-2 border-black rounded-md p-4">
-                <form>
-                  <div className="flex w-full">
-                    <div className="w-3/5 m-auto py-1">
-                      <h3 className="text-center text-lg font-bold">
-                        Subscribe to our newsletter
-                      </h3>
-                    </div>
-                  </div>
-                  <div className="pt-2 pb-2">
-                    <input
-                      type={"text"}
-                      name={"email"}
-                      className="border-2 outline-none py-2 px-4 text-sm w-full rounded-md"
-                    />
-                  </div>
-                  <div className="py-2">
-                    <p>
-                      By clicking "Subscribe" I agree to receive news,
-                      promotions, information and offers from YooKatale
-                    </p>
-                  </div>
-                  <button className="border-0 outline-none py-2 px-4 bg-black rounded-md text-white">
-                    Subscribe
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
           <div className="border-t border-gray-400 py-2"></div>
           <div
             className={`bg-yellow-700 rounded-md w-full absolute bottom-0 h-5/6 backdrop-filter backdrop-blur-lg shadow-gray-50 shadow-inner bg-opacity-5 `}
