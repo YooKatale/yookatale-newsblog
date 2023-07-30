@@ -1,4 +1,6 @@
 export const ROUTES = Object.freeze({
-  BLOGS: "/api/newsblogs",
-  BLOG: "/api/newsblog",
+  BLOGS: "/newsblogs",
+  BLOG: "/newsblog",
+  LOGIN: "/users/auth",
+  SIGNUP: "/users/register",
 });

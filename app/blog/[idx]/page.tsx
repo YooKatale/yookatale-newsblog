@@ -3,6 +3,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { FaLinkedin, FaTwitter, FaUserEdit } from "react-icons/fa";
+import { useRecoilValue } from "recoil";
 
 import Service from "@lib/atoms/service";
 import { ROUTES } from "@lib/atoms/routes";
@@ -11,9 +12,11 @@ import { IBlog } from "@lib/interfaces";
 import Subscribe from "@components/Subscribe";
 import Button from "@components/widgets/Button";
 import { MdFacebook, MdOutlineContentCopy } from "react-icons/md";
+import { isLoggedInState } from "@lib/atoms";
 
 const Blog = ({ params: { idx } }: { params: { idx: string } }) => {
   const [blog, setBlog] = useState<IBlog | null>(null);
+  const isLoggedIn = useRecoilValue(isLoggedInState);
 
   useEffect(() => {
     if (!blog) fetchBlog();
@@ -49,23 +52,17 @@ const Blog = ({ params: { idx } }: { params: { idx: string } }) => {
 
         <div className="w-full relative">
           <div
-            className="lg:text-lg max-h-72 overflow-hidden"
+            className="lg:text-lg"
             dangerouslySetInnerHTML={{
               __html: blog ? blog.blog : "loading...",
             }}
           />
-
-          <div className="py-1">
-            <p className="text-center text-2xl">
-              <span className="font-bold">...</span> Subscribe to our newsletter
-              to continue reading
-            </p>
-          </div>
-
           <div className="border-t border-gray-400 py-2"></div>
-          <div
-            className={`bg-yellow-700 rounded-md w-full absolute bottom-0 h-5/6 backdrop-filter backdrop-blur-lg shadow-gray-50 shadow-inner bg-opacity-5 `}
-          ></div>
+          {isLoggedIn === false ? (
+            <div
+              className={`bg-yellow-700 rounded-md w-full absolute bottom-0 h-5/6 backdrop-filter backdrop-blur-lg shadow-gray-50 shadow-inner bg-opacity-5 `}
+            ></div>
+          ) : null}
         </div>
 
         <Subscribe />

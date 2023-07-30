@@ -1,3 +1,5 @@
+import { ChangeEvent } from "react";
+
 type Props = {
   className?: string;
   placeholder?: string;
@@ -5,7 +7,7 @@ type Props = {
   value?: string;
   id?: string;
   inputType?: string;
-  handleChange?: () => void;
+  handleChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 const Input = ({
