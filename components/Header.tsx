@@ -29,6 +29,11 @@ const Header = () => {
     if (data) setBlogs(data);
   };
 
+  // this will be used in the section where there is 3 cards in the header
+  const threeElements = [1, 2, 3, 5, 6, 7, 8, 9]
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 3);
+
   return (
     <div className="bg-black text-white">
       <div className="w-full lg:w-10/12 px-5 lg:px-0 mx-auto">
@@ -44,10 +49,10 @@ const Header = () => {
             border-gray-600
             lg:py-10
             py-8
-            xl:text-4xl
-            lg:text-2xl
+            xl:text-9xl
             font-extrabold
-            text-4xl
+            text-3xl
+            md:text-7xl
             uppercase
         "
         >
@@ -90,7 +95,9 @@ const Header = () => {
 
           <div className="space-y-4">
             {blogs
-              ? blogs.map((card, i) => <Card key={i} {...blogs[0]} />)
+              ? Array.from({ length: 3 }).map((card, i) => (
+                  <Card key={i} {...blogs[0]} />
+                ))
               : "loading"}
           </div>
         </Link>
@@ -121,10 +128,10 @@ const Card = ({
         alt={author}
         className="lg:h-40 h-28 lg:w-56 w-40  object-cover"
       />
-      <div>
+      <p>
         <p className="text-gray-400">{new Date(createdAt).toDateString()}</p>
         <p className="text-lg font-semibold line-clamp-3">{title}</p>
-      </div>
+      </p>
     </Link>
   );
 };

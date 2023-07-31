@@ -25,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <RecoilRoot>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning={true}>
         <body className={raleway.className}>
           <Sidebar />
           <Topbar />

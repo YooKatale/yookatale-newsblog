@@ -16,6 +16,11 @@ module.exports = {
         primary: "#1F793A",
         secondary: "#FCFAFA",
       },
+      dropShadow: {
+        main: "10px 10px 0px #222222",
+        secondary: "5px 5px 0px #222222",
+        sml: "2px 2px 0px #222222",
+      },
     },
   },
   plugins: [],

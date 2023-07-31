@@ -1,143 +1,143 @@
 "use client";
 
-import JobCard from "@components/cards/JobCard";
+import Button from "@components/widgets/Button";
+import { jobs } from "@lib/constants";
 import React, { useState } from "react";
+import { MdOutlineLocationOn } from "react-icons/md";
 
-const Careers = () => {
-  const [activeJobId, setActiveJobId] = useState("");
+type jobProps = {
+  _id: string;
+  title: string;
+  category: string;
+  reportsTo: string;
+  employment: string;
+  terms: string;
+  location: string;
+  details: {
+    responsibilities: string[];
+    requirements: string[];
+  };
+  salary: string;
+  condition: string;
+  closingDate: string;
+};
 
-  const Jobs = [
-    {
-      _id: "1",
-      title: "Graphic Designer",
-      category: "Design",
-      reportsTo: "Project Manager",
-      employment: "Paid internship",
-      employmentTerms: "Fixed contract [3-6months]",
-      location: "Kampala, Uganda",
-      details: {
-        responsibilities: [
-          "Illustrate written concepts by design",
-          "Plan and study concepts",
-          "Create a variety of company work",
-          "Review layouts & improvements",
-          "Digitally market company products & services",
-          "Visit clients and offer different services",
-          "Communicate to different audiences visually",
-          "Additional skills are a plus 1",
-        ],
-        requirements: [
-          "Creative ,curious and a good team player",
-          "Digital Media experience",
-          "Experience in seo, visual story telling",
-          "Experience in motion and design",
-          "Super interpersonal skills, listening & more",
-          "Photoshop, illustrator & video editing & more",
-          "Competency in Microsoft applications",
-          "Clear understanding of marketing, production, corporate identity, packaging, advertisements & multi-media design",
-          "A bachelor degree in design or marketing or a related field",
-        ],
-      },
-      salary: "Fixed payment & commission based",
-      condition: "NAN",
-      closingDate: "21st August 2023.",
-    },
-    {
-      _id: "2",
-      title: "Junior developer",
-      category: "Software development",
-      reportsTo: "Product Designer",
-      employment: "Paid internship",
-      employmentTerms: "Fixed contract [3-12months]",
-      location: "Kampala, Uganda",
-      details: {
-        responsibilities: [
-          "Writing & maintaining code",
-          "Bug fixing",
-          "Create small creative solutions",
-          "Work with developing manager in all aspects",
-          "Monitor Technical performance of systems",
-          "Conduct development tests",
-          "Gather customer feedback about program functionality",
-          "Customer care & technical assistance",
-        ],
-        requirements: [
-          "Creative curiosity",
-          "Clear execution knowledge",
-          "Sound programming experience",
-          "Excellent communication skills",
-          "Bachelor’s degree in computer science",
-          "Prior experience in IOS & Android development",
-          "Clear practical Coding knowledge React Js, next Js , node Js front & backend",
-          "Clear knowledge of email systems & Microsoft office software",
-          "Good team player",
-          "Quick to learn new software & technologies",
-          "Good Digital experience knowledge",
-          "Any extra skills are a plus 1",
-        ],
-      },
-      salary: "Fixed payment & commission based",
-      condition: "1 month probation",
-      closingDate: "21st August 2023.",
-    },
-    {
-      _id: "3",
-      title: "Sales person",
-      category: "Sales",
-      reportsTo: "Director of sales",
-      employment: "Part time",
-      employmentTerms: "Fixed contract [3-6months]",
-      location: "Kampala, Ntinda & Entebbe",
-      details: {
-        responsibilities: [
-          "Generate both online and offline leads",
-          "Door-to-door sales",
-          "Develop digital communities",
-          "Promote company programs",
-          "Negotiate with clients and answer questions",
-          "Attend events for brand promotions",
-          "Visit clients and offer different services",
-          "Find out different client needs",
-          "Additional skills are a plus 1",
-        ],
-        requirements: [
-          "Creative, curious and a good team player",
-          "Digital Media experience",
-          "Experience in sales",
-          "Super interpersonal skills, quick rapport",
-          "Committed to excellent customer service",
-          "Competency in Microsoft applications",
-          "Excellent written and verbal skills",
-          "A bachelor degree in business, agriculture or marketing or a related field",
-        ],
-      },
-      salary: "Fixed payment & commission based",
-      condition: "NAN",
-      closingDate: "21st August 2023.",
-    },
-  ];
+function Careers() {
   return (
-    <div>
-      <div className={"flex py-4"}>
-        <div className="m-auto lg:w-4/5 w-full">
-          <div className="py-4">
-            <h3 className="text-3xl">Join our team</h3>
-            <p className="text-lg my-1">Available positions</p>
-          </div>
-          <div className="py-4 px-8">
-            {Jobs.map((job, index) => (
-              <JobCard
-                key={index}
-                {...job}
-                setActiveJobId={setActiveJobId}
-                activeId={activeJobId}
-              />
-            ))}
-          </div>
+    <div className="w-full py-10 bg-secondary">
+      <div className="lg:w-7/12 w-11/12 space-y-10 mx-auto">
+        <div className="space-y-2 lg:space-y-3">
+          <p className="text-2xl lg:w-10/12 mx-auto lg:text-5xl text-gray-800 font-semibold">
+            Join our team
+          </p>
+
+          <p className="lg:text-xl text-sm lg:w-10/12 mx-auto">
+            Available Positions
+          </p>
+        </div>
+
+        {/* <div className="my-10 justify-center flex gap-4">
+          {jobCategories.map((job, i) => (
+            <Button
+              key={i}
+              title={job}
+              className="py-2 rounded-full border-2 text-lg hover:bg-gray-300 transition-all duration-300 ease-in-out font-medium border-gray-800 focus:ring-0 px-2"
+            />
+          ))}
+        </div> */}
+
+        <div className="lg:w-10/12 mx-auto space-y-10">
+          {jobs.map((job, i) => (
+            <Card key={i} {...job} />
+          ))}
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default Careers;
+
+const Card = ({
+  _id,
+  title,
+  category,
+  reportsTo,
+  employment,
+  terms,
+  location,
+  details,
+  salary,
+  condition,
+  closingDate,
+}: jobProps) => {
+  const [openDetails, setOpenDetails] = useState(false);
+
+  return (
+    <div className="w-full border-2 lg:border-4 bg-white drop-shadow-secondary lg:drop-shadow-main transition-all duration-300 ease-in-out space-y-2 lg:space-y-5 border-gray-800 p-5">
+      <p className="lg:text-xs text-lg font-semibold">{category}</p>
+      <p className="text-3xl font-semibold">{title}</p>
+      <div className="ml-1 lg:ml-5">
+        <p className="lg:text-lg text-sm text-gray-800">
+          <span className="font-semibold">Reports to:</span> {reportsTo}
+        </p>
+        <p className="lg:text-lg text-sm text-gray-800">
+          <span className="font-semibold">Employment : </span>
+          {employment}
+        </p>
+        <p className="text-sm lg:text-lg text-gray-800">
+          <span className="font-semibold">Employment terms :</span> {terms}
+        </p>
+        <p className="text-sm lg:text-lg text-gray-800">
+          <span className="font-semibold">Salary :</span> {salary}
+        </p>
+        <p className="text-sm lg:text-lg text-gray-800">
+          <span className="font-semibold">To Apply: </span>Send resume
+          <span className="text-blue-700"> info@yookatale.com</span>
+        </p>
+        <p className="text-sm lg:text-lg text-gray-800">
+          <span className="font-semibold">Closing Date</span> {closingDate}
+        </p>
+      </div>
+
+      <Button
+        disabled={true}
+        className="flex items-center gap-1 text-sm lg:text-base border-[1.5px] bg-gray-300 border-black px-2 py-1"
+      >
+        <MdOutlineLocationOn className="lg:text-xl text-sm" />
+        <span>{location}</span>
+      </Button>
+
+      <Button
+        onClick={() => setOpenDetails(!openDetails)}
+        className="text-sm font-semibold border-[1.5px] focus:ring-0 bg-gray-300 hover:bg-gray-100 border-black px-2 drop-shadow-sml lg:drop-shadow-secondary transition-all duration-150 ease-in-out py-1 "
+      >
+        <span>{openDetails ? "Close Details" : "View Details"}</span>
+      </Button>
+
+      <div
+        className={` transition-all lg:border-l lg:ml-10 border-gray-800 duration-500 ease-in-out  lg:w-10/12 lg:p-2 py-2 lg:pl-5 rounded ${
+          openDetails ? "block " : "hidden "
+        }`}
+      >
+        <p className="font-semibold mb-4">Key Responsabilities</p>
+        <ul className="list-disc list-inside">
+          {details.responsibilities.map((item, i) => (
+            <li className="lg:ml-5 text-xs lg:text-sm" key={i}>
+              {item}
+            </li>
+          ))}
+        </ul>
+
+        <p className="font-semibold mb-4 mt-10">Key Requirements</p>
+        <ul className="list-disc list-inside">
+          {details.requirements.map((item, i) => (
+            <li className=" lg:ml-5 text-xs lg:text-sm" key={i}>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+};

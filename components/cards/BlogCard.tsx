@@ -16,7 +16,7 @@ const BlogCard = ({
   return (
     <Link
       href={`/blog/${_id}`}
-      className="space-y-3 cursor-pointer md:border-r border-gray-400 md:pr-5 lg:pr-10 text-gray-600"
+      className="space-y-3 cursor-pointer border-b md:border-b-0 pb-8 md:pb-0 md:border-r border-gray-400 md:pr-5 xl:pr-10 text-gray-600"
     >
       <img
         src={image}
