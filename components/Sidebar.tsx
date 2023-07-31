@@ -12,11 +12,9 @@ import {
 } from "@lib/atoms";
 
 const navs = [
-  { title: "Products", route: "/" },
-  { title: "YooCards", route: "/" },
-  { title: "Contact", route: "/" },
-  { title: "About", route: "/" },
-  { title: "News Blog", route: "/" },
+  { title: "YooKatale", route: "https://www.yookatale.com" },
+  { title: "News blog", route: "/" },
+  { title: "Careers", route: "/careers" },
 ];
 
 const Sidebar = () => {
