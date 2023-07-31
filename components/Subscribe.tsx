@@ -5,7 +5,7 @@ import Button from "@components/widgets/Button";
 
 const Subscribe = () => {
   return (
-    <div className="w-full">
+    <div className="lg:w-[50%] w-full fixed z-50 bottom-[5%]">
       <div className=" p-5 lg:p-20 text-white space-y-5 lg:space-y-10 rounded-lg bg-black">
         <p className="w-full text-center text-xl font-semibold">
           Hi, Upgrade your plan and read more article in YooKatale blog

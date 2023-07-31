@@ -47,7 +47,11 @@ const Sidebar = () => {
       <div className="flex flex-col justify-center items-center space-y-16">
         <div className="mt-20 text-white flex flex-col justify-center items-center space-y-6 hover:text-gray-300">
           {navs.map((nav, i) => (
-            <Link href={nav.route} key={i}>
+            <Link
+              href={nav.route}
+              key={i}
+              onClick={() => setSideMenuState(false)}
+            >
               {nav.title}
             </Link>
           ))}
