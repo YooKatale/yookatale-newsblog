@@ -1,9 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
-import { SideMenuState } from "@lib/atoms";
-import { useRecoilState } from "recoil";
-import Button from "./widgets/Button";
 import { FaTimes } from "react-icons/fa";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
+import Button from "@components/widgets/Button";
+import {
+  SideMenuState,
+  isLoggedInState,
+  isLoggedInStorageKey,
+} from "@lib/atoms";
 
 const navs = [
   { title: "Products", route: "/" },
@@ -15,11 +21,22 @@ const navs = [
 
 const Sidebar = () => {
   const [sideMenuState, setSideMenuState] = useRecoilState(SideMenuState);
+  const isLoggedIn = useRecoilValue(isLoggedInState);
+  const setIsLoggedIn = useSetRecoilState(isLoggedInState);
+  const router = useRouter();
 
   if (!sideMenuState) return null;
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    typeof window !== "undefined" &&
+      localStorage.removeItem(isLoggedInStorageKey);
+    setSideMenuState(false);
+    // router.push("/");
+  };
+
   return (
-    <div className="fixed z-[999999] transition-all ease-in-out duration-700 bg-gray-900 w-full h-screen px-9 py-9">
+    <div className="fixed z-[2] transition-all ease-in-out duration-700 bg-gray-900 w-full h-screen px-9 py-9">
       <div className="flex justify-end">
         <Button
           className="p-2 rounded border-0 bg-gray-700"
@@ -38,9 +55,22 @@ const Sidebar = () => {
           ))}
         </div>
 
-        <Button className="text-xl text-white rounded px-6 py-2 border border-white">
-          <span>Login</span>
-        </Button>
+        {isLoggedIn === false ? (
+          <Link
+            href="/signin"
+            onClick={() => setSideMenuState(false)}
+            className="text-xl text-white rounded px-6 py-2 border border-white"
+          >
+            <span>Login</span>
+          </Link>
+        ) : (
+          <Button
+            onClick={handleLogout}
+            className="text-xl text-white rounded px-6 py-2 border border-white"
+          >
+            <span>Logout</span>
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -1,33 +1,50 @@
 /* eslint-disable @next/next/no-img-element */
 import { MdMenu } from "react-icons/md";
 import Link from "next/link";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
-import { SideMenuState } from "@lib/atoms";
+import {
+  LoginState,
+  SideMenuState,
+  isLoggedInState,
+  isLoggedInStorageKey,
+} from "@lib/atoms";
 import Button from "@components/widgets/Button";
+import { FaUserCircle } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const navs = [
-  { title: "Yookatale", route: "https://yookatale.com" },
-  { title: "Newsblog", route: "/" },
+  { title: "YooKatale", route: "https://www.yookatale.com" },
+  { title: "News blog", route: "/" },
   { title: "Careers", route: "/careers" },
 ];
 
 const Topbar = () => {
   const setSideMenuState = useSetRecoilState(SideMenuState);
+  const setLoginState = useSetRecoilState(LoginState);
+  const isLoggedIn = useRecoilValue(isLoggedInState);
+  const setIsLoggedIn = useSetRecoilState(isLoggedInState);
+
+  const router = useRouter();
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    typeof window !== "undefined" &&
+      localStorage.removeItem(isLoggedInStorageKey);
+    // router.push("/");
+  };
 
   return (
     <div className="w-full bg-black py-5">
-      <div className="w-10/12 py-4 mx-auto flex items-center justify-between text-white">
-        <div className="flex items-center gap-8 justify-between">
+      <div className="w-10/12 mx-auto flex items-center justify-between text-white">
+        <div className="flex items-center gap-8">
           <Link href="/">
-            <div className="flex justify-center items-center">
-              <img
-                src="https://ik.imagekit.io/2ujnunod7moo/logo_qZklD2mDa.png?updatedAt=1690463142255"
-                alt="logo"
-                className="w-20 cursor-pointer object-cover"
-              />
-            </div>
-            <h3 className="text-base font-bold">Here For You</h3>
+            <img
+              src="https://ik.imagekit.io/2ujnunod7moo/logo_qZklD2mDa.png?updatedAt=1690463142255"
+              alt="logo"
+              className="h-16 cursor-pointer object-cover"
+            />
+            <p className="font-bold text-sm text-gray-200 ">Here For you</p>
           </Link>
           <div className="lg:flex gap-2 hidden">
             {navs.map((nav, i) => (
@@ -37,11 +54,25 @@ const Topbar = () => {
             ))}
           </div>
         </div>
-        <div className="hidden">
+        <div>
           <div className="lg:flex items-center hidden gap-2">
-            <Button className="py-2 px-6 rounded border border-white hover:bg-gray-900">
-              <span>Login</span>
-            </Button>
+            {isLoggedIn === false ? (
+              <Link
+                href="https://yookatale.com/signin"
+                onClick={() => setLoginState(true)}
+                className="py-2 px-6 rounded border border-white hover:bg-gray-900"
+              >
+                <span>Login</span>
+              </Link>
+            ) : (
+              <Button
+                onClick={handleLogout}
+                className="py-2 px-6 rounded border border-white hover:bg-gray-900"
+              >
+                <span>Logout</span>
+                {/* <FaUserCircle className="text-xl text-gray-200" /> */}
+              </Button>
+            )}
           </div>
           <div className="block lg:hidden">
             <Button className="" onClick={() => setSideMenuState(true)}>

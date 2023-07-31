@@ -13,17 +13,14 @@ class Service {
       };
     }
 
-    const { data } = err.response;
-    const { error, message, status } = data;
+    const { data, status } = err.response;
+    const { stack, message } = data;
 
     if (message) {
       return { data: null, error: message, status };
     }
 
-    if (typeof error !== "string") {
-      return { data: null, errors: "Unknown error", status };
-    }
-    return { data: null, error, status };
+    return { data: null, stack, status };
   };
 
   /**
@@ -63,10 +60,10 @@ class Service {
       .catch(this.handleError);
   }
 
-  static async post(url: string, data: any, token: string) {
+  static async post(url: string, data: any, token?: string) {
     return await axios
       .post(url, data, token ? this.requestHeaders(token) : null)
-      .then(this.resolveResponse)
+      .then((res) => res.data)
       .catch(this.handleError);
   }
 
