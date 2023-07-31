@@ -58,7 +58,7 @@ const Topbar = () => {
           <div className="lg:flex items-center hidden gap-2">
             {isLoggedIn === false ? (
               <Link
-                href="/signin"
+                href="https://yookatale.com/signin"
                 onClick={() => setLoginState(true)}
                 className="py-2 px-6 rounded border border-white hover:bg-gray-900"
               >

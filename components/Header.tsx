@@ -95,9 +95,7 @@ const Header = () => {
 
           <div className="space-y-4">
             {blogs
-              ? Array.from({ length: 3 }).map((card, i) => (
-                  <Card key={i} {...blogs[0]} />
-                ))
+              ? blogs.map((card, i) => <Card key={i} {...card} />)
               : "loading"}
           </div>
         </Link>

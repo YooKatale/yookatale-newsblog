@@ -36,16 +36,6 @@ function Careers() {
           </p>
         </div>
 
-        {/* <div className="my-10 justify-center flex gap-4">
-          {jobCategories.map((job, i) => (
-            <Button
-              key={i}
-              title={job}
-              className="py-2 rounded-full border-2 text-lg hover:bg-gray-300 transition-all duration-300 ease-in-out font-medium border-gray-800 focus:ring-0 px-2"
-            />
-          ))}
-        </div> */}
-
         <div className="lg:w-10/12 mx-auto space-y-10">
           {jobs.map((job, i) => (
             <Card key={i} {...job} />
