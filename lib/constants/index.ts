@@ -6,6 +6,89 @@ export const jobCategories = [
   "Product Management",
 ];
 
+export const comments = [
+  {
+    id: 1,
+    content: "This is a great article!",
+    author: "JohnDoe",
+    timestamp: "2023-07-31 12:00:00",
+    replies: [
+      {
+        id: 101,
+        content: "Thanks for your comment!",
+        author: "ArticleAuthor",
+        timestamp: "2023-07-31 12:05:00",
+      },
+      {
+        id: 102,
+        content: "Glad you liked it!",
+        author: "AnotherUser",
+        timestamp: "2023-07-31 12:10:00",
+      },
+    ],
+    likes: 15,
+  },
+  {
+    id: 2,
+    content: "Nice work, keep it up!",
+    author: "JaneSmith",
+    timestamp: "2023-07-31 12:30:00",
+    replies: [
+      {
+        id: 201,
+        content: "Thank you, Jane!",
+        author: "ArticleAuthor",
+        timestamp: "2023-07-31 12:32:00",
+      },
+    ],
+    likes: 8,
+  },
+  {
+    id: 3,
+    content: "I have a question about this topic.",
+    author: "Questioner123",
+    timestamp: "2023-07-31 14:00:00",
+    replies: [
+      {
+        id: 301,
+        content: "Sure, feel free to ask!",
+        author: "ArticleAuthor",
+        timestamp: "2023-07-31 14:05:00",
+      },
+      {
+        id: 302,
+        content: "I'm curious too, waiting for the answer!",
+        author: "CuriousMind",
+        timestamp: "2023-07-31 14:10:00",
+      },
+    ],
+    likes: 12,
+  },
+  {
+    id: 4,
+    content: "Well written! I learned a lot.",
+    author: "LearningLover",
+    timestamp: "2023-07-31 15:00:00",
+    replies: [],
+    likes: 20,
+  },
+  {
+    id: 5,
+    content: "Could you provide more examples?",
+    author: "ExampleSeeker",
+    timestamp: "2023-07-31 16:00:00",
+    replies: [
+      {
+        id: 501,
+        content: "Certainly! Here's an additional example...",
+        author: "ArticleAuthor",
+        timestamp: "2023-07-31 16:05:00",
+      },
+    ],
+    likes: 5,
+  },
+];
+
 export const jobs = [
   {
     _id: "1",

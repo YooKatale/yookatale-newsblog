@@ -29,11 +29,6 @@ const Header = () => {
     if (data) setBlogs(data);
   };
 
-  // this will be used in the section where there is 3 cards in the header
-  const threeElements = [1, 2, 3, 5, 6, 7, 8, 9]
-    .sort(() => 0.5 - Math.random())
-    .slice(0, 3);
-
   return (
     <div className="bg-black text-white">
       <div className="w-full lg:w-10/12 px-5 lg:px-0 mx-auto">
