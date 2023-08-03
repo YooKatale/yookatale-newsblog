@@ -29,7 +29,6 @@ const Signin = () => {
         (email !== "" || email !== undefined || email !== null) &&
         (password !== "" || password !== undefined || password !== null)
       ) {
-        setIsLoggedIn(true);
         const res = await Service.post(ROUTES.LOGIN, {
           email,
           password,
