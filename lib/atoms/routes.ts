@@ -3,4 +3,5 @@ export const ROUTES = Object.freeze({
   BLOG: "/newsblog",
   LOGIN: "/users/auth",
   SIGNUP: "/users/register",
+  NEWSBLOGCOMMENT: "/newsblogs/comments",
 });
