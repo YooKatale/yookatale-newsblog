@@ -125,7 +125,7 @@ const Blog = ({ params: { idx } }: { params: { idx: string } }) => {
               {Comments &&
                 Comments.length > 0 &&
                 Comments.map((comment, index) => (
-                  <Comment key={index} {...comment} />
+                  <Comment key={index} {...Object.assign(comment)} />
                 ))}
             </div>
           </div>
