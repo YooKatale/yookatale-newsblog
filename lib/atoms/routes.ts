@@ -3,5 +3,7 @@ export const ROUTES = Object.freeze({
   BLOG: "/newsblog",
   LOGIN: "/users/auth",
   SIGNUP: "/users/register",
-  NEWSBLOGCOMMENT: "/newsblogs/comments",
+  NEWSLETTER: "/newsletter",
+  COMMENTS: "/newsblogs/comments",
+  LOGOUT: "/users/logout",
 });

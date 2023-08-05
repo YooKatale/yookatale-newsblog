@@ -4,8 +4,10 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import {
+  FaCheck,
   FaRegComment,
   FaRegHeart,
+  FaSpinner,
   FaUserCircle,
   FaUserEdit,
 } from "react-icons/fa";
@@ -13,76 +15,69 @@ import { MdSend } from "react-icons/md";
 
 import Service from "@lib/atoms/service";
 import { ROUTES } from "@lib/atoms/routes";
-import { IBlog, IComment } from "@lib/interfaces";
+import { IBlog } from "@lib/interfaces";
 
 import Subscribe from "@components/Subscribe";
 import Button from "@components/widgets/Button";
-import { isLoggedInState, useAuth } from "@lib/atoms";
+import { isLoggedInState, userInfo } from "@lib/atoms";
 import { comments } from "@lib/constants";
-import TextArea from "@components/widgets/TextArea";
+
+type TReply = {
+  id: number;
+  reply: string;
+  user: string;
+};
+
+type TComment = {
+  id: number;
+  comment: string;
+  user: {
+    firstname: string;
+    lastname: string;
+  };
+  timestamp: string;
+  replies: Array<TReply>;
+  likes: number;
+  createdAt: string;
+  updatedAt: string;
+};
 
 const Blog = ({ params: { idx } }: { params: { idx: string } }) => {
   const [blog, setBlog] = useState<IBlog | null>(null);
-  const [comment, setComment] = useState<string>("");
-  const isLoggedIn = useRecoilValue(isLoggedInState);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [blogComments, setBlogComments] = useState<IComment[]>([]);
-  const authData = useAuth();
-
-  useEffect(() => {
-    if (!blog) fetchBlog();
-
-    if (blogComments.length === 0) getComments();
-  }, [blog, blogComments]);
+  const isLoggedInStateHolder = useRecoilValue(isLoggedInState);
+  const [isLoggedIn, setIsLoggedIn] = useState(isLoggedInStateHolder);
+  const [Comments, setComments] = useState([]);
 
   const fetchBlog = async () => {
     const { data } = await Service.get(`${ROUTES.BLOG}/${idx}`);
     if (data) setBlog(data);
   };
 
-  const getComments = async () => {
-    const { data } = await Service.get(ROUTES.NEWSBLOGCOMMENT);
+  const fetchBlogComments = async () => {
+    const res = await Service.get(`${ROUTES.COMMENTS}/${idx}`);
 
-    if (data) setBlogComments(data);
+    if (res?.status == "Success") setComments(res?.data);
   };
 
-  const addComment = async () => {
-    try {
-      if (
-        comment !== "" &&
-        comment !== undefined &&
-        comment !== null &&
-        authData !== null
-      ) {
-        setLoading(true);
-
-        const newComment: any = {
-          user: authData._id,
-          comment,
-          newsblogId: idx,
-        };
-
-        await Service.post(ROUTES.NEWSBLOGCOMMENT, newComment);
-
-        setLoading(false);
-        setComment("");
-      }
-    } catch (error) {}
+  const handleListeningToEmailSubscription = (param: boolean) => {
+    if (param) setIsLoggedIn(true);
   };
 
-  const getCommentTime = (createdAt: string) => {
-    return new Date(createdAt);
-  };
+  useEffect(() => {
+    if (!blog) fetchBlog();
+
+    fetchBlogComments();
+  }, [blog]);
 
   return (
     <div className="w-full bg-white py-10 text-black">
       <div
-        className={`fixed top-0 flex items-center justify-center z-[3] bg-gray-800/40 w-full h-screen ${
-          isLoggedIn === false ? " block " : " hidden "
+        className={`fixed bottom-[5%] flex items-center justify-center z-[3] w-[50%] ${
+          isLoggedIn === false ? "block" : "hidden"
         }`}
       >
         <div className="w-11/12 md:w-6/12 mx-auto">
-          <Subscribe />
+          <Subscribe callback={handleListeningToEmailSubscription} />
         </div>
       </div>
       <div className="w-full px-5 relative lg:px-0 lg:w-6/12 space-y-10 mx-auto">
@@ -125,34 +120,13 @@ const Blog = ({ params: { idx } }: { params: { idx: string } }) => {
         </div>
         <div className="w-10/12 mx-auto">
           <div className="space-y-8">
-            <div className="w-full flex justify-between items-center gap-3">
-              <FaUserCircle className="text-4xl w-14 text-gray-500" />
-              <TextArea
-                className="focus:border-gray-300 w-full resize-none px-3 py-2 border border-gray-200 bg-gray-50 rounded-lg outline-none "
-                value={comment}
-                placeholder="Comment here"
-                handleChange={(e) => setComment(e.target.value)}
-                rows={1}
-              />
-
-              <Button
-                onClick={addComment}
-                className="text-white focus:ring-0 hover:bg-gray-700 transition-all duration-200 ease-in-out rounded-md px-3 py-2 border bg-gray-900"
-              >
-                {loading === false ? (
-                  <MdSend className="text-2xl text-white" />
-                ) : (
-                  <span className="text-white">loading...</span>
-                )}
-              </Button>
-            </div>
-
+            <TextArea id={idx} />
             <div className="space-y-6">
-              {blogComments
-                ? blogComments
-                    .filter((comment) => comment.newsblog === idx)
-                    .map((item, i) => <Comment key={i} {...item} />)
-                : ""}
+              {Comments &&
+                Comments.length > 0 &&
+                Comments.map((comment, index) => (
+                  <Comment key={index} {...comment} />
+                ))}
             </div>
           </div>
         </div>
@@ -163,15 +137,82 @@ const Blog = ({ params: { idx } }: { params: { idx: string } }) => {
 
 export default Blog;
 
+interface TextaraProp {
+  id: string;
+}
+
+const TextArea = (prop: TextaraProp) => {
+  const [response, setResponse] = useState("");
+  const [comment, setComment] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const isLoggedIn = useRecoilValue(isLoggedInState);
+
+  const user = userInfo();
+
+  const createNewsblogComment = async () => {
+    setIsLoading((prevState) => (prevState ? false : true));
+
+    const res = await Service.post(`${ROUTES.COMMENTS}`, {
+      user: user?._id,
+      comment: comment,
+      newsblogId: prop.id,
+    });
+
+    setIsLoading((prevState) => (prevState ? false : true));
+
+    if (res?.status == "Success") {
+      setResponse("Success");
+
+      setTimeout(() => {
+        setResponse("");
+        setComment("");
+      }, 3000);
+    }
+  };
+
+  return (
+    isLoggedIn && (
+      <div className="w-full flex items-center gap-3">
+        <FaUserCircle className="text-5xl text-gray-500" />
+        <textarea
+          className="w-full focus:border-gray-300 resize-none px-3 py-2 border border-gray-200 bg-gray-50 rounded-lg outline-none "
+          rows={1}
+          placeholder="Add your comment here"
+          onChange={(e) => setComment(e.target.value)}
+          value={comment}
+        ></textarea>
+
+        <Button
+          className="text-white focus:ring-0 hover:bg-gray-700 transition-all duration-200 ease-in-out rounded-md px-3 py-2 border bg-gray-900"
+          onClick={createNewsblogComment}
+        >
+          {isLoading ? (
+            <FaSpinner />
+          ) : (
+            <MdSend className="text-2xl text-white" />
+          )}
+        </Button>
+
+        {response == "Success" && (
+          <div className="mx-3">
+            <FaCheck className="text-green-500 text-2xl" />
+          </div>
+        )}
+      </div>
+    )
+  );
+};
+
 const Comment = ({
-  _id,
+  id,
   user,
   comment,
+  likes,
   replies,
-  newsblog,
   createdAt,
-}: IComment) => {
-  const [openTextArea, setOpenTextArea] = useState<boolean>(false);
+  updatedAt,
+}: TComment) => {
+  const [openTextArea, setOpenTextArea] = useState(false);
 
   return (
     <div className="space-y-3">
@@ -179,21 +220,19 @@ const Comment = ({
         <div className="flex items-center gap-2">
           <div className="flex gap-1 items-center">
             <FaUserCircle className="text-gray-500" />
-            <span className="text-xs md:text-base font-semibold">{user}</span>
+            <span className="font-semibold">{`${user?.firstname} ${user?.lastname}`}</span>
           </div>
 
-          <p className="text-xs font-light md:font-normal md:text-sm">
-            {createdAt ? new Date(createdAt).toDateString() : ""}
-          </p>
+          <p className="text-sm">{new Date(createdAt).toDateString()}</p>
         </div>
 
         <p>{comment}</p>
       </div>
 
-      <div className="flex items-center hidden  gap-10">
+      <div className="flex items-center  gap-10">
         <Button className="flex text-gray-900 hover:text-gray-700 transition-all duration-150 ease-in-out items-center gap-1 text-sm font-semibold">
           <FaRegHeart className="" />
-          <span>{0} likes</span>
+          <span>{likes ? likes : 0} likes</span>
         </Button>
         <Button
           onClick={() => setOpenTextArea(!openTextArea)}
@@ -210,42 +249,35 @@ const Comment = ({
           openTextArea === false ? " hidden " : " block "
         }`}
       >
-        <TextArea
+        <textarea
+          className="w-full focus:border-gray-300 resize-none px-3 py-2 border border-gray-200 bg-gray-50 rounded-lg outline-none "
           rows={1}
-          className="w-full focus:border-gray-300 resize-none px-3 py-2 border border-gray-200 bg-gray-50 rounded-lg outline-none"
-          placeholder="Reply here"
-          value={""}
-          handleChange={(e) => e.target.value}
-        />
+          placeholder="Add your comment here"
+        ></textarea>
 
         <Button className="text-white focus:ring-0 hover:bg-gray-700 transition-all duration-200 ease-in-out rounded-md px-3 py-2 border bg-gray-900">
           <MdSend className="text-2xl text-white" />
         </Button>
       </div>
 
-      <div className="hidden flex-col items-end space-y-4 ">
-        {replies
-          ? replies.map((item, i) => (
-              <div
-                key={i}
-                className="px-3 py-2 w-11/12 space-y-2 font-light bg-gray-200 border border-gray-300 rounded-md"
-              >
-                <div className="flex items-center gap-2">
-                  <div className="flex gap-1 items-center">
-                    <FaUserCircle className="text-gray-500" />
-                    <span className="text-xs md:text-base font-semibold">
-                      author
-                    </span>
-                  </div>
-
-                  <p className="text-xs font-light md:font-normal md:text-sm">
-                    date
-                  </p>
+      <div className="flex flex-col items-end space-y-4 ">
+        {replies.length > 0 &&
+          replies.map((reply, index) => (
+            <div
+              key={index}
+              className="px-3 py-2 w-11/12 space-y-2 font-light bg-gray-200 border border-gray-300 rounded-md"
+            >
+              <div className="flex items-center gap-2">
+                <div className="flex gap-1 items-center">
+                  <FaUserCircle className="text-gray-500" />
+                  <span className="font-semibold">{reply?.user}</span>
                 </div>
-                <p>comment</p>
+
+                <p className="text-sm">{new Date(updatedAt).toDateString()}</p>
               </div>
-            ))
-          : ""}
+              <p>{reply?.reply}</p>
+            </div>
+          ))}
       </div>
     </div>
   );
