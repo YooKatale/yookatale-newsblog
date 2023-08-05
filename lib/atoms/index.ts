@@ -1,6 +1,7 @@
 import { atom, selector } from "recoil";
 
-import { IBlog } from "@lib/interfaces";
+import { IBlog, IUserData } from "@lib/interfaces";
+import { useEffect, useState } from "react";
 
 export const SideMenuState = atom<boolean>({ key: "sidemenu", default: false });
 
@@ -45,3 +46,18 @@ export const isLoggedInSelector = selector<boolean>({
     return isLoggedIn;
   },
 });
+
+export const useAuth = (): IUserData | null => {
+  const [authData, setAuthData] = useState<IUserData | null>(null);
+
+  useEffect(() => {
+    const storedData =
+      typeof window !== "undefined" &&
+      localStorage.getItem(isLoggedInStorageKey);
+    if (storedData) {
+      setAuthData(JSON.parse(storedData));
+    }
+  }, []);
+
+  return authData;
+};

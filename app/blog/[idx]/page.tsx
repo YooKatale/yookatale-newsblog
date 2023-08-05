@@ -226,7 +226,7 @@ const Comment = ({
           <p className="text-sm">{new Date(createdAt).toDateString()}</p>
         </div>
 
-        <p>{comment}</p>
+        <p>{content}</p>
       </div>
 
       <div className="flex items-center  gap-10">
