@@ -17,17 +17,25 @@ export const TopBlogState = atom<IBlog | null>({
 
 export const isLoggedInStorageKey = "yookatale-app";
 
-const isLoggedInFromLocalStorage = (): boolean => {
+export const isLoggedInFromLocalStorage = (): boolean => {
   const storageValue =
     typeof window !== "undefined" &&
     localStorage?.getItem(isLoggedInStorageKey);
 
-  return storageValue === "true" ? true : false;
+  return storageValue ? true : false;
+};
+
+export const userInfo = (): Object => {
+  const storageValue =
+    typeof window !== "undefined" &&
+    JSON.parse(localStorage?.getItem(isLoggedInStorageKey));
+
+  return storageValue ? storageValue : {};
 };
 
 export const isLoggedInState = atom<boolean>({
   key: "isLoggedInState",
-  default: false,
+  default: isLoggedInFromLocalStorage(),
 });
 
 export const isLoggedInSelector = selector<boolean>({

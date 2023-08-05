@@ -4,8 +4,10 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import {
+  FaCheck,
   FaRegComment,
   FaRegHeart,
+  FaSpinner,
   FaUserCircle,
   FaUserEdit,
 } from "react-icons/fa";
@@ -17,47 +19,65 @@ import { IBlog } from "@lib/interfaces";
 
 import Subscribe from "@components/Subscribe";
 import Button from "@components/widgets/Button";
-import { isLoggedInState } from "@lib/atoms";
+import { isLoggedInState, userInfo } from "@lib/atoms";
 import { comments } from "@lib/constants";
 
 type TReply = {
   id: number;
-  content: string;
-  author: string;
-  timestamp: string;
+  reply: string;
+  user: string;
 };
 
 type TComment = {
   id: number;
-  content: string;
-  author: string;
+  comment: string;
+  user: {
+    firstname: string;
+    lastname: string;
+  };
   timestamp: string;
   replies: Array<TReply>;
   likes: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 const Blog = ({ params: { idx } }: { params: { idx: string } }) => {
   const [blog, setBlog] = useState<IBlog | null>(null);
-  const isLoggedIn = useRecoilValue(isLoggedInState);
-
-  useEffect(() => {
-    if (!blog) fetchBlog();
-  }, [blog]);
+  const isLoggedInStateHolder = useRecoilValue(isLoggedInState);
+  const [isLoggedIn, setIsLoggedIn] = useState(isLoggedInStateHolder);
+  const [Comments, setComments] = useState([]);
 
   const fetchBlog = async () => {
     const { data } = await Service.get(`${ROUTES.BLOG}/${idx}`);
     if (data) setBlog(data);
   };
 
+  const fetchBlogComments = async () => {
+    const res = await Service.get(`${ROUTES.COMMENTS}/${idx}`);
+
+    if (res?.status == "Success") setComments(res?.data);
+  };
+
+  const handleListeningToEmailSubscription = (param: boolean) => {
+    if (param) setIsLoggedIn(true);
+  };
+
+  useEffect(() => {
+    if (!blog) fetchBlog();
+
+    fetchBlogComments();
+  }, [blog]);
+
   return (
     <div className="w-full bg-white py-10 text-black">
       <div
-        className={`fixed top-0 flex items-center justify-center z-[3] bg-gray-800/90 w-full h-screen ${
-          isLoggedIn === false ? " block " : " hidden "
+        className={`fixed bottom-[5%] flex items-center justify-center z-[3] w-[50%] ${
+          isLoggedIn === false ? "block" : "hidden"
         }`}
       >
         <div className="w-11/12 md:w-6/12 mx-auto">
-          <Subscribe />
+          <Subscribe callback={handleListeningToEmailSubscription} />
         </div>
       </div>
       <div className="w-full px-5 relative lg:px-0 lg:w-6/12 space-y-10 mx-auto">
@@ -100,11 +120,13 @@ const Blog = ({ params: { idx } }: { params: { idx: string } }) => {
         </div>
         <div className="w-10/12 mx-auto">
           <div className="space-y-8">
-            <TextArea />
+            <TextArea id={idx} />
             <div className="space-y-6">
-              {comments.map((item, i) => (
-                <Comment key={i} {...item} />
-              ))}
+              {Comments &&
+                Comments.length > 0 &&
+                Comments.map((comment, index) => (
+                  <Comment key={index} {...comment} />
+                ))}
             </div>
           </div>
         </div>
@@ -115,38 +137,80 @@ const Blog = ({ params: { idx } }: { params: { idx: string } }) => {
 
 export default Blog;
 
-const TextArea = ({
-  onChange,
-  value,
-}: {
-  onChange?: () => void;
-  value?: string;
-}) => {
-  return (
-    <div className="w-full flex items-center gap-3">
-      <FaUserCircle className="text-5xl text-gray-500" />
-      <textarea
-        className="w-full focus:border-gray-300 resize-none px-3 py-2 border border-gray-200 bg-gray-50 rounded-lg outline-none "
-        rows={1}
-        placeholder="Add your comment here"
-        onChange={onChange}
-        value={value}
-      ></textarea>
+interface TextaraProp {
+  id: string;
+}
 
-      <Button className="text-white focus:ring-0 hover:bg-gray-700 transition-all duration-200 ease-in-out rounded-md px-3 py-2 border bg-gray-900">
-        <MdSend className="text-2xl text-white" />
-      </Button>
-    </div>
+const TextArea = (prop: TextaraProp) => {
+  const [response, setResponse] = useState("");
+  const [comment, setComment] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const isLoggedIn = useRecoilValue(isLoggedInState);
+
+  const user = userInfo();
+
+  const createNewsblogComment = async () => {
+    setIsLoading((prevState) => (prevState ? false : true));
+
+    const res = await Service.post(`${ROUTES.COMMENTS}`, {
+      user: user?._id,
+      comment: comment,
+      newsblogId: prop.id,
+    });
+
+    setIsLoading((prevState) => (prevState ? false : true));
+
+    if (res?.status == "Success") {
+      setResponse("Success");
+
+      setTimeout(() => {
+        setResponse("");
+        setComment("");
+      }, 3000);
+    }
+  };
+
+  return (
+    isLoggedIn && (
+      <div className="w-full flex items-center gap-3">
+        <FaUserCircle className="text-5xl text-gray-500" />
+        <textarea
+          className="w-full focus:border-gray-300 resize-none px-3 py-2 border border-gray-200 bg-gray-50 rounded-lg outline-none "
+          rows={1}
+          placeholder="Add your comment here"
+          onChange={(e) => setComment(e.target.value)}
+          value={comment}
+        ></textarea>
+
+        <Button
+          className="text-white focus:ring-0 hover:bg-gray-700 transition-all duration-200 ease-in-out rounded-md px-3 py-2 border bg-gray-900"
+          onClick={createNewsblogComment}
+        >
+          {isLoading ? (
+            <FaSpinner />
+          ) : (
+            <MdSend className="text-2xl text-white" />
+          )}
+        </Button>
+
+        {response == "Success" && (
+          <div className="mx-3">
+            <FaCheck className="text-green-500 text-2xl" />
+          </div>
+        )}
+      </div>
+    )
   );
 };
 
 const Comment = ({
   id,
-  author,
-  content,
+  user,
+  comment,
   likes,
   replies,
-  timestamp,
+  createdAt,
+  updatedAt,
 }: TComment) => {
   const [openTextArea, setOpenTextArea] = useState(false);
 
@@ -156,19 +220,19 @@ const Comment = ({
         <div className="flex items-center gap-2">
           <div className="flex gap-1 items-center">
             <FaUserCircle className="text-gray-500" />
-            <span className="font-semibold">{author}</span>
+            <span className="font-semibold">{`${user?.firstname} ${user?.lastname}`}</span>
           </div>
 
-          <p className="text-sm">{new Date(timestamp).toDateString()}</p>
+          <p className="text-sm">{new Date(createdAt).toDateString()}</p>
         </div>
 
-        <p>{content}</p>
+        <p>{comment}</p>
       </div>
 
       <div className="flex items-center  gap-10">
         <Button className="flex text-gray-900 hover:text-gray-700 transition-all duration-150 ease-in-out items-center gap-1 text-sm font-semibold">
           <FaRegHeart className="" />
-          <span>{likes} likes</span>
+          <span>{likes ? likes : 0} likes</span>
         </Button>
         <Button
           onClick={() => setOpenTextArea(!openTextArea)}
@@ -197,24 +261,23 @@ const Comment = ({
       </div>
 
       <div className="flex flex-col items-end space-y-4 ">
-        {replies.map((item, i) => (
-          <div
-            key={i}
-            className="px-3 py-2 w-11/12 space-y-2 font-light bg-gray-200 border border-gray-300 rounded-md"
-          >
-            <div className="flex items-center gap-2">
-              <div className="flex gap-1 items-center">
-                <FaUserCircle className="text-gray-500" />
-                <span className="font-semibold">{item.author}</span>
-              </div>
+        {replies.length > 0 &&
+          replies.map((reply, index) => (
+            <div
+              key={index}
+              className="px-3 py-2 w-11/12 space-y-2 font-light bg-gray-200 border border-gray-300 rounded-md"
+            >
+              <div className="flex items-center gap-2">
+                <div className="flex gap-1 items-center">
+                  <FaUserCircle className="text-gray-500" />
+                  <span className="font-semibold">{reply?.user}</span>
+                </div>
 
-              <p className="text-sm">
-                {new Date(item.timestamp).toDateString()}
-              </p>
+                <p className="text-sm">{new Date(updatedAt).toDateString()}</p>
+              </div>
+              <p>{reply?.reply}</p>
             </div>
-            <p>{item.content}</p>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );

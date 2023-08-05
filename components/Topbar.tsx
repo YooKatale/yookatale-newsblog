@@ -6,12 +6,15 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
   LoginState,
   SideMenuState,
+  isLoggedInFromLocalStorage,
   isLoggedInState,
   isLoggedInStorageKey,
 } from "@lib/atoms";
 import Button from "@components/widgets/Button";
 import { FaUserCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import Service from "@lib/atoms/service";
+import { ROUTES } from "@lib/atoms/routes";
 
 const navs = [
   { title: "YooKatale", route: "https://www.yookatale.com" },
@@ -27,11 +30,14 @@ const Topbar = () => {
 
   const router = useRouter();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setIsLoggedIn(false);
     typeof window !== "undefined" &&
       localStorage.removeItem(isLoggedInStorageKey);
-    // router.push("/");
+
+    const res = await Service.post(`${ROUTES.LOGOUT}`, null);
+
+    if (res?.status == "Success") router.push("/");
   };
 
   return (
