@@ -125,7 +125,7 @@ const Blog = ({ params: { idx } }: { params: { idx: string } }) => {
               {Comments &&
                 Comments.length > 0 &&
                 Comments.map((comment, index) => (
-                  <Comment key={index} {...comment} />
+                  <Comment key={index} {...Object.assign(comment)} />
                 ))}
             </div>
           </div>
@@ -147,7 +147,7 @@ const TextArea = (prop: TextaraProp) => {
   const [isLoading, setIsLoading] = useState(false);
   const isLoggedIn = useRecoilValue(isLoggedInState);
 
-  const user = userInfo();
+  const user: any = userInfo();
 
   const createNewsblogComment = async () => {
     setIsLoading((prevState) => (prevState ? false : true));

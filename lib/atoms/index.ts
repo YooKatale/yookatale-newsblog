@@ -28,9 +28,9 @@ export const isLoggedInFromLocalStorage = (): boolean => {
 export const userInfo = (): Object => {
   const storageValue =
     typeof window !== "undefined" &&
-    JSON.parse(localStorage?.getItem(isLoggedInStorageKey));
+    localStorage?.getItem(isLoggedInStorageKey);
 
-  return storageValue ? storageValue : {};
+  return storageValue ? JSON.parse(storageValue) : {};
 };
 
 export const isLoggedInState = atom<boolean>({
