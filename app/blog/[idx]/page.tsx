@@ -147,7 +147,7 @@ const TextArea = (prop: TextaraProp) => {
   const [isLoading, setIsLoading] = useState(false);
   const isLoggedIn = useRecoilValue(isLoggedInState);
 
-  const user = userInfo();
+  const user: any = userInfo();
 
   const createNewsblogComment = async () => {
     setIsLoading((prevState) => (prevState ? false : true));
