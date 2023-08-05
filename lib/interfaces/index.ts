@@ -1,5 +1,3 @@
-import { MouseEventHandler } from "react";
-
 export interface IBlog {
   _id: string;
   author: string;
@@ -28,4 +26,26 @@ export interface Job {
   closingDate: string;
   activeId: String;
   setActiveJobId: (_id: string) => void;
+}
+
+export interface IUserData {
+  _id: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  vegan: boolean;
+  phone: string;
+  expires: string;
+  gender: string;
+}
+
+export interface IComment {
+  _id?: string;
+  user?: string;
+  newsblog?: string;
+  comment?: string;
+  replies?: Array<null>;
+  createdAt?: string;
+  updatedAt: string;
+  _v?: number;
 }
