@@ -18,6 +18,8 @@ const Subscribe = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleNewsletterSubmit = async () => {
+    console.log("callef");
+
     setIsLoading((prevState) => (prevState ? false : true));
     try {
       const res = await Service.post(`${ROUTES.NEWSLETTER}`, { email });
