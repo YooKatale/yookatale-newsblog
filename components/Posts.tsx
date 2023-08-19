@@ -21,8 +21,8 @@ const Posts = () => {
   };
 
   return (
-    <div className="w-10/12 bg-white mx-auto space-y-10 my-10">
-      <p className="uppercase font-bold text-gray-400 ">More from YooKatale</p>
+    <div className="w-10/12  mx-auto space-y-10 my-10">
+      <h2 className="uppercase font-bold text-emerald-900 text-xl">More from YooKatale</h2>
 
       <div className="grid gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {blogs
