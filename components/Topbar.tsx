@@ -41,7 +41,7 @@ const Topbar = () => {
   };
 
   return (
-    <div className="w-full bg-black py-5">
+    <div className="w-full bg-emerald-900 py-5">
       <div className="w-10/12 mx-auto flex items-center justify-between text-white">
         <div className="flex items-center gap-8">
           <Link href="/">
@@ -50,11 +50,11 @@ const Topbar = () => {
               alt="logo"
               className="h-16 cursor-pointer object-cover"
             />
-            <p className="font-bold text-sm text-gray-200 ">Here For you</p>
+            <p className="font-bold text-sm text-slate-200 ">Here For you</p>
           </Link>
           <div className="lg:flex gap-2 hidden">
             {navs.map((nav, i) => (
-              <Link href={nav.route} key={i} className="hover:text-gray-400">
+              <Link href={nav.route} key={i} className="hover:text-amber-400 transition">
                 {nav.title}
               </Link>
             ))}
@@ -66,14 +66,14 @@ const Topbar = () => {
               <Link
                 href="https://yookatale.com/signin"
                 onClick={() => setLoginState(true)}
-                className="py-2 px-6 rounded border border-white hover:bg-gray-900"
+                className="py-2 px-6 rounded-md border hover:border-inherit shadow-sm hover:shadow border-yellow-600 transition hover:bg-yellow-600 text-yellow-600 hover:text-slate-100"
               >
                 <span>Login</span>
               </Link>
             ) : (
               <Button
                 onClick={handleLogout}
-                className="py-2 px-6 rounded border border-white hover:bg-gray-900"
+                className="py-2 px-6 rounded-md border hover:border-inherit shadow-sm hover:shadow border-yellow-600 transition hover:bg-yellow-600 text-yellow-600 hover:text-slate-100"
               >
                 <span>Logout</span>
                 {/* <FaUserCircle className="text-xl text-gray-200" /> */}
@@ -82,7 +82,7 @@ const Topbar = () => {
           </div>
           <div className="block lg:hidden">
             <Button className="" onClick={() => setSideMenuState(true)}>
-              <MdMenu className="text-3xl text-white" />
+              <MdMenu className="text-3xl text-slate-100" />
             </Button>
           </div>
         </div>

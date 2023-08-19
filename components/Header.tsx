@@ -30,24 +30,23 @@ const Header = () => {
   };
 
   return (
-    <div className="bg-black text-white">
+    <div className="bg-emerald-100 text-emerald-800">
       <div className="w-full lg:w-10/12 px-5 lg:px-0 mx-auto">
         <div
           className="
             w-full
-            text-white
+            text-emerald-900
             flex
             items-center
             justify-center
             border-b
             border-t
-            border-gray-600
+            border-emerald-600
             lg:py-10
             py-8
-            xl:text-9xl
             font-extrabold
             text-3xl
-            md:text-7xl
+            md:text-xl
             uppercase
         "
         >
@@ -58,7 +57,7 @@ const Header = () => {
           href={blog ? `/blog/${blog._id}` : "/"}
           className="grid grid-cols-1 py-10 md:grid-cols-2 gap-10 w-full"
         >
-          <div className="space-y-3 text-gray-400">
+          <div className="space-y-3 text-emerald-950 opacity-80">
             <img
               src={
                 blog
@@ -68,20 +67,20 @@ const Header = () => {
               alt={blog ? blog.author : "yookatale"}
               className="lg:h-96 h-60 w-full object-cover"
             />
-            <p>
+            <p className="text-yellow-500">
               {blog ? new Date(blog.createdAt).toDateString() : "loading..."}
             </p>
             <div className="space-y-2">
-              <p className="flex items-center gap-2">
+              <p className="flex items-center gap-2 text-slate-800 opacity-80">
                 <FaUserEdit size={20} />
                 <span>by {blog ? blog.author : "Yookatale"}</span>
               </p>
-              <p className="line-clamp-2 font-semibold text-white text-xl lg:text-2xl">
+              <p className="line-clamp-2 font-semibold text-emerald-900 text-xl lg:text-2xl">
                 {blog ? blog.title : "loading..."}
               </p>
             </div>
             <div
-              className="line-clamp-3"
+              className="line-clamp-3 text-slate-900"
               dangerouslySetInnerHTML={{
                 __html: blog ? blog.blog : "loading...",
               }}
@@ -114,7 +113,7 @@ const Card = ({
   return (
     <Link
       href={`/blog/${_id}`}
-      className="flex lg:flex-row flex-row-reverse cursor-pointer gap-4 border-b border-gray-600 pb-6"
+      className="flex lg:flex-row flex-row-reverse cursor-pointer gap-4 border-b border-emerald-600 pb-6"
     >
       <img
         src={image}
@@ -122,8 +121,8 @@ const Card = ({
         className="lg:h-40 h-28 lg:w-56 w-40  object-cover"
       />
       <p>
-        <p className="text-gray-400">{new Date(createdAt).toDateString()}</p>
-        <p className="text-lg font-semibold line-clamp-3">{title}</p>
+        <p className="text-amber-400">{new Date(createdAt).toDateString()}</p>
+        <h2 className="text-lg font-semibold line-clamp-3 capitalize">{title}</h2>
       </p>
     </Link>
   );
