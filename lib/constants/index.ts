@@ -1,3 +1,8 @@
+import banana from '@public/ProductImages/banana.jpeg'
+import mango from '@public/ProductImages/mango.jpeg'
+import lemon from '@public/ProductImages/lemon.jpeg'
+import orange from '@public/ProductImages/orange.jpeg'
+
 export const jobCategories = [
   "Software Development",
   "Data Science",
@@ -238,3 +243,35 @@ export const jobs = [
     closingDate: "21st August 2023.",
   },
 ];
+
+
+export const products = [
+  {
+    id: 1,
+    image: banana,
+    name: "Bananas",
+    price: 5000,
+    description: "Sweet and ripe yellow Bananas"
+  },
+  {
+    id: 2,
+    image: mango,
+    name: "Mangoes",
+    price: 10000,
+    description: "Sweet and ripe mangoes for juice"
+  },
+  {
+    id: 3,
+    image: orange,
+    name: "Oranges",
+    price: 5000,
+    description: "Sweet and ripe oranges for juice"
+  },
+  {
+    id: 4,
+    image: lemon,
+    name: "Lemons",
+    price: 5000,
+    description: "These are fresh lemons"
+  },
+]
