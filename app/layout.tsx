@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <RecoilRoot>
       <html lang="en" suppressHydrationWarning={true}>
-        <body className={raleway.className}>
+        <body className={raleway.className+"bg-slate-100"} >
           <Sidebar />
           <Topbar />
           {children}
