@@ -1,6 +1,7 @@
 "use client";
 import Header from "@components/Header";
 import Posts from "@components/Posts";
+import Products from "@components/Products";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
     <main className="">
       <Header />
       <Posts />
+      <Products />
     </main>
   );
 }
